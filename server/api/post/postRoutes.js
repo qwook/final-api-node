@@ -1,5 +1,7 @@
 var router = require('express').Router();
 var Post = require('./postModel.js');
+var Category = require('../category/categoryModel.js');
+var User = require('../user/userModel.js');
 
 // setup boilerplate route jsut to satisfy a request
 // for building
@@ -10,11 +12,23 @@ router.route('/')
     })
   })
   .post(function(req, res, next) {
-    Post.create({
-      username: req.body.username
-    }, function(err, user) {
+    User.findOne({username: req.body.author}, function(err, user) {
       if (err) return next(err);
-      res.send({success: true, user: user});
+      if (!user) return next("No such user");
+
+      Category.find({name: req.body.categories || []}, function(err, cats) {
+        if (err) return next(err);
+
+        Post.create({
+          title: req.body.title,
+          text: req.body.text,
+          author: user,
+          categories: cats,
+        }, function(err, user) {
+          if (err) return next(err);
+          res.send({success: true, user: user});
+        });
+      });
     });
   });
 

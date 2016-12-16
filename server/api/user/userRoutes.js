@@ -23,13 +23,29 @@ router.route('/')
   });
 
 router.route('/:user_id')
-  .get(function(req, res){
-    
+  .get(function(req, res, next){
+    User.findById(req.params.user_id, function(err, user) {
+      if (err) return next(err);
+      if (!user) return next("No such user.");
+      res.send({success: true, user: user});
+    });
   })
-
-router.get('/err', function(req, res){
-  console.log("hey");
-  throw "ERROR!!";
-});
+  .put(function(req, res, next) {
+    User.findById(req.params.user_id, function(err, user) {
+      if (err) return next(err);
+      user.username = req.body.username
+      user.address = req.body.address
+      user.save(function(err) {
+        if (err) return next(err);
+        res.send({success: true, user: user})
+      })
+    });
+  })
+  .delete(function(req, res, next) {
+    User.remove({_id: req.params.user_id}, function(err, user) {
+      if (err) return next(err);
+      res.send({success: true, user: user});
+    });
+  })
 
 module.exports = router;
