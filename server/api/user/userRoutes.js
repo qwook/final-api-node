@@ -33,8 +33,8 @@ router.route('/:user_id')
   .put(function(req, res, next) {
     User.findById(req.params.user_id, function(err, user) {
       if (err) return next(err);
-      user.username = req.body.username
-      user.address = req.body.address
+      user.username = req.body.username;
+      user.address = req.body.address;
       user.save(function(err) {
         if (err) return next(err);
         res.send({success: true, user: user})
