@@ -9,6 +9,7 @@ var router = require('express').Router();
 router.route('/')
   .get(function(req, res){
     console.log('Hey from user!!');
+    throw "this is an error";
     res.send({ok: true});
   });
 
