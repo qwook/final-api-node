@@ -1,14 +1,12 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var UserSchema = new Schema({
-  username: {
+var CategorySchema = new Schema({
+  name: {
     type: String,
     unique: true,
     required: true
-  },
-
-  address: String
+  }
 });
 
-module.exports = mongoose.model('user', UserSchema);
+module.exports = mongoose.model('category', CategorySchema);
